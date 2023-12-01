@@ -1,32 +1,44 @@
-// require("@nomiclabs/hardhat-waffle");
+/**
+ * @type import('hardhat/config').HardhatUserConfig
+ */
+
+//  require('@nomicfoundation/hardhat-toolbox');
 require("@nomiclabs/hardhat-ethers");
 require("@nomiclabs/hardhat-etherscan");
 require("@openzeppelin/hardhat-upgrades");
 require('hardhat-abi-exporter');
-require('dotenv').config();
-module.exports = {
-  defaultNetwork: "testnet",
-  networks: {
-    hardhat: {
-    },
-    testnet: {
-      url: "https://data-seed-prebsc-1-s3.binance.org:8545/",
-      accounts: [process.env.ADMIN]
-    }
-  },
-  solidity: {
-    version: "0.8.14",
-    settings: {
-      optimizer: {
-        enabled: true,
-        runs: 200
-      }
-    }
-  },
-  mocha: {
-    timeout: 40000
-  },
-  etherscan : {
-    apiKey: process.env.API_KEY
-  }
-}
+
+ const dotenv = require('dotenv');
+ dotenv.config({ path: '.env' });
+ 
+ module.exports = {
+   defaultNetwork: "local",
+   networks: {
+     // testnet
+
+     // local
+     local: {
+       url: `${process.env.RPCURL}`,
+       accounts: [process.env.PRIVKEY],
+       chainId: 9000, // local chainId
+     },
+   },
+ 
+   // include compiler version defined in your smart contract
+   solidity: {
+     compilers: [
+       {
+         version: '0.8.9',
+       },
+     ],
+   },
+ 
+   paths: {
+     sources: "./contracts",
+     cache: "./cache",
+     artifacts: "./artifacts",
+   },
+   mocha: {
+     timeout: 20000,
+   },
+ };
