@@ -1,9 +1,9 @@
-# OverMint Project
+# QuaiMark Project
 
 Try running some of the following tasks:
 
 ```shell
-npx hardhat run --network testnet scripts/depoly_overmint.js
-npx hardhat verify --network testnet CONTRACT-OVERMINT
+npx hardhat run --network testnet scripts/depoly_quaimark.js
+npx hardhat verify --network testnet CONTRACT-QUAIMARK
 ```
-# ovm-contract
+# quai-contract
