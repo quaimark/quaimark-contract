@@ -113,13 +113,23 @@ contract QuaiMark is AccessControl, ReentrancyGuard {
         bytes32 ethSignedMessageHash = ECDSA.toEthSignedMessageHash(criteriaMessageHash);
         require(ECDSA.recover(ethSignedMessageHash, signature) == addresses[0],"QUAIMARK: invalid seller signature");
         require(IERC721(addresses[1]).ownerOf(values[0]) == addresses[0],"QUAIMARK: seller is not owner of this item now");
-        if (msg.value > values[1]) TransferHelper.safeTransferETH(msg.sender, msg.value.sub(values[1]));
+        // if (msg.value > values[1]) TransferHelper.safeTransferETH(msg.sender, msg.value.sub(values[1]));
         uint256 fee = transactionFee.mul(values[1]).div(1000);
         uint256 payToSellerAmount = values[1].sub(fee);
         totalFee += fee;
         TransferHelper.safeTransferETH(addresses[0], payToSellerAmount);
         TransferHelper.safeTransferFromERC721(addresses[1], addresses[0], _msgSender(), values[0]);
         emitMatchTransaction(addresses, values);
+    }
+
+    function verify(
+        address[3] memory addresses,
+        uint256[4] memory values,
+        bytes memory signature
+    ) external view returns(address){
+        bytes32 criteriaMessageHash = getMessageHash(addresses[1],values[0],addresses[2],values[1],values[2],values[3],1);
+        bytes32 ethSignedMessageHash = ECDSA.toEthSignedMessageHash(criteriaMessageHash);
+        return ECDSA.recover(ethSignedMessageHash, signature);
     }
 
     function matchOffer(
